@@ -24,7 +24,7 @@ const add_bmi = (req, res) => {
       if (err) {
         return res.status(500).json({ error_message: err });
       }
-      return res.status(201).json({ bmi: id });
+      return res.status(200).json({ bmi: id });
     });
   });
 };
