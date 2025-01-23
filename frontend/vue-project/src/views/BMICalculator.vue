@@ -147,6 +147,7 @@
   </template>
   
   <script>
+  import { foodservices } from '../services/foodservices.js';
   export default {
     data() {
       return {
@@ -180,6 +181,11 @@
   
         // Calculate BMI: BMI = weight (kg) / (height (m) * height (m))
         this.bmi = this.weight / (heightInMeters * heightInMeters);
+
+        foodservices.addBmi(this.bmi)
+        .then(response => {
+          console.log(response.data);
+        })
       },
       interpretMaleBMI(bmi) {
         if (bmi < 18.5) return "Underweight (Male)";
