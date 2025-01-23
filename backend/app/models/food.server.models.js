@@ -120,7 +120,7 @@ const foodById = (foodId, done) => {
 
     // Converting the object into an  of foods
 
-    return done(null, rows);
+    return done(null, foods);
   });
 };
 
