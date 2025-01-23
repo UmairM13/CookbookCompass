@@ -11,12 +11,15 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
 
     db.run(
       `CREATE TABLE users (
-                user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
                 first_name text,
                 last_name text,
-                email text UNIQUE,
+                email text UNIQUE NOT NULL,
                 password text,
                 salt text,
+                age TEXT,
+                gender TEXT,
+                bmi TEXT,
                 session_token text,
                 CONSTRAINT email_unique UNIQUE (email)
             )`,
@@ -30,76 +33,99 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
     );
 
     db.run(
-      `CREATE TABLE events (
-                event_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT,
-                description TEXT,
-                location TEXT,
-                start_date INTEGER,
-                close_registration INTEGER,
-                max_attendees INTEGER,
-                creator_id INTEGER,
-                FOREIGN KEY(creator_id) REFERENCES users(user_id)
-            )`,
+      `CREATE TABLE "Allergens" (
+	"allergenId"	INTEGER NOT NULL UNIQUE,
+	"name"	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY("allergenId" AUTOINCREMENT)
+)`,
       (err) => {
         if (err) {
-          console.log("Events table already created");
+          console.log("Allergens table already created");
         } else {
-          console.log("Events table created");
+          console.log("Allergens table created");
         }
       }
     );
 
     db.run(
-      `CREATE TABLE attendees (
-                event_id INTEGER,
-                user_id INTEGER,
-                PRIMARY KEY (event_id, user_id),
-                FOREIGN KEY (event_id) REFERENCES events(event_id),
-                FOREIGN KEY (user_id) REFERENCES users(user_id)
-            )`,
+      `CREATE TABLE "Equipments" (
+	"equipmentId"	INTEGER NOT NULL UNIQUE,
+	"equipmentName"	TEXT NOT NULL,
+	PRIMARY KEY("equipmentId" AUTOINCREMENT)
+)`,
       (err) => {
         if (err) {
           // console.log(err)
-          console.log("Attendees table already created");
+          console.log("Equipments table already created");
         } else {
-          console.log("Attendees table created");
+          console.log("Equipments table created");
         }
       }
     );
 
     db.run(
-      `CREATE TABLE questions (
-                question_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                question TEXT,
-                asked_by INTEGER,
-                event_id INTEGER,
-                votes INTEGER,
-                FOREIGN KEY (asked_by) REFERENCES users(user_id)
-                FOREIGN KEY (event_id) REFERENCES events(event_id)
-            )`,
+      `CREATE TABLE "FoodAllergens" (
+	"foodId"	INTEGER NOT NULL,
+	"allergenId"	INTEGER,
+	FOREIGN KEY("allergenId") REFERENCES "Allergens"("allergenId"),
+	FOREIGN KEY("foodId") REFERENCES "Foods"("foodId")
+)`,
       (err) => {
         if (err) {
-          console.log("Questions table already created");
+          console.log("FoodAllergens table already created");
         } else {
-          console.log("Questions table created");
+          console.log("FoodAllergens table created");
         }
       }
     );
 
     db.run(
-      `CREATE TABLE votes (
-            question_id INTEGER,
-            voter_id INTEGER,
-            PRIMARY KEY (question_id, voter_id),
-            FOREIGN KEY (question_id) REFERENCES questions(question_id),
-            FOREIGN KEY (voter_id) REFERENCES users(user_id)
-        )`,
+      `CREATE TABLE "FoodIngredients" (
+	"ingredientId"	INTEGER NOT NULL,
+	"foodId"	INTEGER NOT NULL,
+	FOREIGN KEY("foodId") REFERENCES "Foods"("foodId"),
+	FOREIGN KEY("ingredientId") REFERENCES "Ingredients"("ingredientsId")
+)`,
       (err) => {
         if (err) {
-          console.log("Votes table already created");
+          console.log("FoodIngredients table already created");
         } else {
-          console.log("Votes table created");
+          console.log("FoodIngredients table created");
+        }
+      }
+    );
+
+    db.run(
+      `CREATE TABLE "Foods" (
+	"foodId"	INTEGER NOT NULL UNIQUE,
+	"name"	TEXT NOT NULL UNIQUE,
+	"budget"	INTEGER,
+	"image"	TEXT NOT NULL,
+	"servings"	INTEGER,
+	"recipe"	TEXT,
+	"cuisine"	TEXT, calories,
+	PRIMARY KEY("foodId" AUTOINCREMENT)
+)`,
+      (err) => {
+        if (err) {
+          console.log("Foods table already created");
+        } else {
+          console.log("Foods table created");
+        }
+      }
+    );
+
+    db.run(
+      `CREATE TABLE "Ingredients" (
+	"ingredientsId"	INTEGER NOT NULL UNIQUE,
+	"Name"	TEXT NOT NULL UNIQUE,
+	PRIMARY KEY("ingredientsId" AUTOINCREMENT)
+)`,
+      (err) => {
+        if (err) {
+          console.log("Ingredients table already created");
+        } else {
+          console.log("Ingredients table created");
         }
       }
     );
