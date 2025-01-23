@@ -57,6 +57,9 @@ import { foodservices } from '../services/foodservices'
                 
             }
         },
+        created(){
+            this.searchMeal();
+        },
         methods:{
             searchMeal(){
                 foodservices.search(this.search)
