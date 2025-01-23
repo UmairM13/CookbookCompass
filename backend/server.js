@@ -30,7 +30,7 @@ app.get("/", (req, res, next) => {
 // You can uncomment the below four lines as you implement the functionality - we'll discuss this structure in week three.
 require("./app/routes/user.server.routes.js")(app);
 require("./app/routes/food.server.routes.js")(app);
-// require("./app/routes/question.server.routes")(app);
+require("./app/routes/bmi.server.routes")(app);
 
 // Default response for any other request
 app.use((req, res) => {
