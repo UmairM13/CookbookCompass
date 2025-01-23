@@ -67,19 +67,27 @@ export default {
         // Call the login method from userServices
         const response = await userServices.login(this.email, this.password);
 
-
-        localStorage.setItem("session_token", response.session_token); 
+        // Store the session token in localStorage
+        localStorage.setItem("session_token", response.session_token);
         window.dispatchEvent(new Event('storage'));
 
+        console.log("Login successful! Session token:", response.session_token);
+        this.error = "";
 
-        console.log(response.session_token);
-        this.error = ""; 
-
-        // Handle successful login
-        if (response) {
-          alert("Login successful!");
-          this.$router.push({ path: "/" }); // Redirect to dashboard or home page
+        // Fetch the user's BMI after successful login
+        try {
+          const bmiResponse = await userServices.getBmi();
+          const bmi = bmiResponse.bmi; // Assuming the response has a `bmi` field
+          localStorage.setItem("bmi", bmi); // Store BMI in localStorage
+          console.log("BMI fetched and stored:", bmi);
+        } catch (bmiError) {
+          console.error("Failed to fetch BMI:", bmiError);
+          this.error = "Failed to fetch BMI. Please try again later.";
+          return;
         }
+
+        // Redirect to the home page or dashboard
+        this.$router.push({ path: "/" });
       } catch (err) {
         // Handle login error
         this.error = "Invalid email or password. Please try again.";
