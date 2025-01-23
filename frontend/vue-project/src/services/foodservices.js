@@ -98,9 +98,32 @@ const addBmi = (bmi) => {
     });
 };
 
+const getRecommendations = (bmiCategory) => {
+  return fetch(
+    `http://localhost:5000/api/recommendations?bmi_category=${bmiCategory}`
+  )
+    .then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 400) {
+        throw "Bad request";
+      } else {
+        throw "Something went wrong";
+      }
+    })
+    .then((resJson) => {
+      return resJson;
+    })
+    .catch((error) => {
+      console.log(error);
+      return Promise.reject(error);
+    });
+};
+
 export const foodservices = {
   search,
   info,
   foodByFilter,
   addBmi,
+  getRecommendations,
 };
