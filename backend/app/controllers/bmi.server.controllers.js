@@ -29,6 +29,24 @@ const add_bmi = (req, res) => {
   });
 };
 
+const get_bmi = (req, res) => {
+  let token = req.get("X-Authorization");
+
+  users.getIdFromToken(token, (err, user_id) => {
+    if (err) {
+      return res.status(401).json({ error_message: err });
+    }
+
+    bmiModels.getBmi(user_id, (err, row) => {
+      if (err) {
+        return res.status(500).json({ error_message: err });
+      }
+      return res.status(200).json({ bmi: row.bmi });
+    });
+  });
+};
+
 module.exports = {
   add_bmi,
+  get_bmi,
 };

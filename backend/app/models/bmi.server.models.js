@@ -11,6 +11,18 @@ const addBmi = (bmi, user_id, done) => {
   });
 };
 
+const getBmi = (user_id, done) => {
+  let sql = "SELECT bmi FROM users WHERE user_id = ?";
+
+  db.get(sql, [user_id], (err, row) => {
+    if (err) {
+      return done(err);
+    }
+    return done(null, row);
+  });
+};
+
 module.exports = {
   addBmi,
+  getBmi,
 };
