@@ -7,6 +7,7 @@ import Recommendation from "../views/Recommendation.vue";
 import Login from "../views/Login.vue";
 import Signup from "@/views/Signup.vue";
 import BMICalculator from "@/views/BMICalculator.vue";
+import ChatSystem from "@/views/ChatSystem.vue";
 
 const ifAuthenticated = (to, from, next) => {
   const loggedIn = localStorage.getItem("session_token");
@@ -31,6 +32,7 @@ const routes = [
   { path: "/login", component: Login },
   { path: "/signup", component: Signup },
   { path: "/bmiCalculator", component: BMICalculator },
+  { path: "/chat", component: ChatSystem },
 
   // Add other routes as needed
 ];
