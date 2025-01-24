@@ -21,6 +21,9 @@
         <router-link to="/bmiCalculator">
           <li class="text-indigo-500 hover:text-indigo-300 hover:scale-110 cursor-pointer list-none mr-5">BMI calculator</li>
         </router-link>
+        <router-link to="/chat">
+          <li class="text-indigo-500 hover:text-indigo-300 hover:scale-110 cursor-pointer list-none mr-5">Chat</li>
+        </router-link>
   
       </nav>
       <!-- Dynamic Button -->

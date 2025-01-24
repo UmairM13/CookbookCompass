@@ -72,7 +72,7 @@ const foodByFilter = (
 
 const foodById = (foodId, done) => {
   let sql = `
-      SELECT f.name, f.image, f.recipe, f.budget, f.cuisine, a.name AS allergen, i.name AS ingredient
+      SELECT f.name, f.image, f.recipe, f.budget, f.cuisine, f.calories, a.name AS allergen, i.name AS ingredient
         FROM foods AS f
         LEFT JOIN FoodAllergens AS fa ON fa.foodId = f.foodId
         LEFT JOIN Allergens AS a ON a.allergenId = fa.allergenId
@@ -101,8 +101,16 @@ const foodById = (foodId, done) => {
 
     let foods = {};
     processedRows.forEach((row) => {
-      const { image, name, recipe, budget, cuisine, allergen, ingredient } =
-        row;
+      const {
+        image,
+        name,
+        recipe,
+        budget,
+        cuisine,
+        calories,
+        allergen,
+        ingredient,
+      } = row;
       if (!foods[name]) {
         foods[name] = {
           image,
@@ -110,6 +118,7 @@ const foodById = (foodId, done) => {
           recipe,
           budget,
           cuisine,
+          calories,
           allergen,
           ingredients: [ingredient],
         };

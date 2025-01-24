@@ -55,6 +55,8 @@
         <div class="flex mt-6 items-center pb-5  border-gray-100 mb-5">
           <div class="flex">
           <div>
+            <span class="mr-2">Calories:</span>
+            <p>{{ calories }}</p>
            <span class="mr-2">Ingredients:</span>
             <p>{{ ingredients }}</p>
           </div>
@@ -102,6 +104,7 @@ export default {
       allergen:"",
       error: null,
       ingredients:"",
+      calories:"",
     };
   },
   created() {
@@ -131,6 +134,8 @@ export default {
     this.allergen=foodData.allergen;
     console.log("Ingredients:", foodData.ingredients.join(", "));
     this.ingredients=foodData.ingredients.join(", ");
+    this.calories=foodData.calories;
+    console.log("calories:", foodData.calories);
   }
 }
           
