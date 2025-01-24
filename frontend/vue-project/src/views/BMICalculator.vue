@@ -184,6 +184,7 @@
 
         foodservices.addBmi(this.bmi)
         .then(response => {
+          localStorage.setItem('bmi', this.bmi)
           console.log(response.data);
         })
       },
