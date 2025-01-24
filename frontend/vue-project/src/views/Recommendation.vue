@@ -1,16 +1,22 @@
 <template>
   <div class="recipe-recommendations">
-    <h1>Here are your recipe recommendations based on your BMI:</h1>
-    <div v-if="loading">Loading recommendations...</div>
+    <div v-if="!bmi">
+      <p>No BMI data found. Please calculate your BMI first.</p>
+      <router-link to="/bmiCalculator">Calculate BMI</router-link>
+    </div>
     <div v-else>
-      <div v-if="recipes.length > 0">
-        <div v-for="recipe in recipes" :key="recipe.title" class="recipe-card">
-          <h2>{{ recipe.title }}</h2>
-          <p>Calories: {{ recipe.calories }} kcal</p>
-        </div>
-      </div>
+      <h1>Here are your recipe recommendations based on your BMI:</h1>
+      <div v-if="loading">Loading recommendations...</div>
       <div v-else>
-        <p>No recipes found. Please try again later.</p>
+        <div v-if="recipes.length > 0">
+          <div v-for="recipe in recipes" :key="recipe.title" class="recipe-card">
+            <h2>{{ recipe.title }}</h2>
+            <p>Calories: {{ recipe.calories }} kcal</p>
+          </div>
+        </div>
+        <div v-else>
+          <p>No recipes found. Please try again later.</p>
+        </div>
       </div>
     </div>
   </div>
@@ -22,15 +28,29 @@ import { foodservices } from '@/services/foodservices'; // Import the service
 export default {
   data() {
     return {
+      bmi: null, // Initialize BMI as null
       recipes: [], // Stores the recipe recommendations
       loading: true, // Tracks whether data is being fetched
     };
   },
   created() {
-    // Fetch recommendations when the component is created
-    this.fetchRecommendations();
+    // Check if BMI is present in localStorage
+    this.checkBmi();
   },
   methods: {
+    // Function to check if BMI is present in localStorage
+    checkBmi() {
+      const bmi = parseFloat(localStorage.getItem('bmi'));
+
+      // If BMI is not present or invalid, redirect to Calculate BMI page
+      if (!bmi || isNaN(bmi)) {
+        this.$router.push({ path: '/bmiCalculator' });
+      } else {
+        this.bmi = bmi; // Set BMI in the component's data
+        this.fetchRecommendations(); // Fetch recommendations
+      }
+    },
+
     // Function to categorize BMI
     categorizeBmi(bmi) {
       if (bmi < 18.5) {
@@ -41,19 +61,12 @@ export default {
         return 'overweight';
       }
     },
+
+    // Function to fetch recommendations
     async fetchRecommendations() {
       try {
-        // Get BMI from localStorage
-        const bmi = parseFloat(localStorage.getItem('bmi'));
-
-        // Check if BMI is null or undefined
-        if (!bmi || isNaN(bmi)) {
-          this.$router.push({ path: '/calculate-bmi' }); // Redirect to Calculate BMI page
-          return;
-        }
-
         // Categorize BMI
-        const bmiCategory = this.categorizeBmi(bmi);
+        const bmiCategory = this.categorizeBmi(this.bmi);
 
         // Fetch recommendations based on BMI category
         const data = await foodservices.getRecommendations(bmiCategory);

@@ -71,6 +71,7 @@ const logout = () => {
   }).then((response) => {
     // Clear the session token
     localStorage.removeItem("session_token");
+    localStorage.removeItem("bmi");
     if (!response.ok) {
       throw new Error("Logout failed");
     }
