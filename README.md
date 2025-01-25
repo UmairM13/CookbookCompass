@@ -49,7 +49,7 @@ npm (Node Package Manager)
      `npm run dev`
    - flask server:
      `cd backend/recommendation`
-     `python ./main.py`
+     `python ./app.py`
    - frontend
      `cd frontend/vue-project`
      `npm run dev`
